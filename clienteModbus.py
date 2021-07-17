@@ -1,10 +1,8 @@
-from pyModbusTCP import client
 from pyModbusTCP.client import ModbusClient
 from time import sleep
 import time
 import datetime
 import sqlite3
-from threading import Lock
 
 
 class ClienteMODBUS():
@@ -73,7 +71,7 @@ class ClienteMODBUS():
                             sleep(0.5)
                             try:
                                 for i in range(0,int(nvezes)):
-                                    print(f'\033[33mLeitura {i+1}:\033[m')
+                                    print(f'\033[33mLeitura {i+1}:\033[m', end='')
                                     print(self.lerDado(int(tipo),int(addr),leng))
                                     sleep(self._scan_time)
                                 print('\nValores lidos e inseridos no DB com sucesso!!\n')
@@ -87,7 +85,7 @@ class ClienteMODBUS():
                                         self._cliente.open()
                                     sleep(0.5)
                                     for i in range(0, int(nvezes)):
-                                        print(f'\033[33mLeitura {i + 1}:\033[m')
+                                        print(f'\033[33mLeitura {i + 1}:\033[m', end='')
                                         print(self.lerDado(int(tipo), int(addr), leng))
                                         sleep(self._scan_time)
                                     print('\nValores lidos e inseridos no DB com sucesso!!\n')
@@ -105,7 +103,7 @@ class ClienteMODBUS():
                             sleep(0.5)
                             try:
                                 for i in range(0, int(nvezes)):
-                                    print(f'\033[33mLeitura {i + 1}:\033[m')
+                                    print(f'\033[33mLeitura {i + 1}:\033[m', end='')
                                     print(self.lerDadoFloat(int(tipo), int(addr), leng))
                                     sleep(self._scan_time)
                                 print('\nValores lidos e inseridos no DB com sucesso!!\n')
@@ -123,7 +121,7 @@ class ClienteMODBUS():
                             sleep(0.5)
                             try:
                                 for i in range(0, int(nvezes)):
-                                    print(f'\033[33mLeitura {i + 1}:\033[m')
+                                    print(f'\033[33mLeitura {i + 1}:\033[m', end='')
                                     print(self.lerDadoFloatSwapped(int(tipo), int(addr), leng))
                                     sleep(self._scan_time)
                                 print('\nValores lidos e inseridos no DB com sucesso!!\n')
@@ -145,7 +143,7 @@ class ClienteMODBUS():
                         sleep(0.5)
                         try:
                             for i in range(0, int(nvezes)):
-                                print(f'\033[33mLeitura {i + 1}:\033[m')
+                                print(f'\033[33mLeitura {i + 1}:\033[m', end='')
                                 print(self.lerDado(int(tipo), int(addr), leng))
                                 sleep(self._scan_time)
                             print('\nValores lidos e inseridos no DB com sucesso!!\n')
@@ -402,7 +400,7 @@ class ClienteMODBUS():
             # print(f'{round(value, 3)}')
             listfloat.append(round(value, 3))
             y += 2
-            # self.inserirDB(addrs=(ende+addr+y-2), tipo=tipore, value=round(value, 3))
+            self.inserirDB(addrs=(ende+addr+y-2), tipo=tipore, value=round(value, 3))
         return listfloat
 
 
@@ -459,7 +457,7 @@ class ClienteMODBUS():
             # print(f'{round(value, 3)}')
             listfloatsp.append(round(value, 3))
             y += 2
-            # self.inserirDB(addrs=(ende+addr+y-2), tipo=tipore, value=round(value, 3))
+            self.inserirDB(addrs=(ende+addr+y-2), tipo=tipore, value=round(value, 3))
         return listfloatsp
 
 
