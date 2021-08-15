@@ -303,20 +303,6 @@ class ClienteMODBUS():
             print('\033[31mERRO: ', e.args, '\033[m')
 
 
-    def inserirDBF01(self, addrs, tipo, disp, value):
-        """
-        Método para inserção dos dados no DB
-        """
-        try:
-            date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
-            str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
-            sql_str = f'INSERT INTO pointValuesF01 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
-            self._cursor.execute(sql_str)
-            self._con.commit()
-        except Exception as e:
-            print('\033[31mERRO: ', e.args, '\033[m')
-
-
     def createTableF02(self):
         """
         Método que cria a tabela para armazenamento dos dados, caso ela não exista
@@ -326,20 +312,6 @@ class ClienteMODBUS():
             CREATE TABLE IF NOT EXISTS pointValuesF02 (
                 ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Address TEXT, Type TEXT, Display TEXT, Value REAL, TimeStamp1 TEXT NOT NULL)
                 """
-            self._cursor.execute(sql_str)
-            self._con.commit()
-        except Exception as e:
-            print('\033[31mERRO: ', e.args, '\033[m')
-
-
-    def inserirDBF02(self, addrs, tipo, disp, value):
-        """
-        Método para inserção dos dados no DB
-        """
-        try:
-            date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
-            str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
-            sql_str = f'INSERT INTO pointValuesF02 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
             self._cursor.execute(sql_str)
             self._con.commit()
         except Exception as e:
@@ -361,20 +333,6 @@ class ClienteMODBUS():
             print('\033[31mERRO: ', e.args, '\033[m')
 
 
-    def inserirDBF03(self, addrs, tipo, disp, value):
-        """
-        Método para inserção dos dados no DB
-        """
-        try:
-            date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
-            str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
-            sql_str = f'INSERT INTO pointValuesF03 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
-            self._cursor.execute(sql_str)
-            self._con.commit()
-        except Exception as e:
-            print('\033[31mERRO: ', e.args, '\033[m')
-
-
     def createTableF04(self):
         """
         Método que cria a tabela para armazenamento dos dados, caso ela não exista
@@ -390,16 +348,35 @@ class ClienteMODBUS():
             print('\033[31mERRO: ', e.args, '\033[m')
 
 
-    def inserirDBF04(self, addrs, tipo, disp, value):
+    def inserirDBF0(self, addrs, tipo, disp, value):
         """
         Método para inserção dos dados no DB
         """
         try:
-            date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
-            str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
-            sql_str = f'INSERT INTO pointValuesF04 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
-            self._cursor.execute(sql_str)
-            self._con.commit()
+            if tipo == "'F01-CoilStatus'":
+                date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
+                str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
+                sql_str = f'INSERT INTO pointValuesF01 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
+                self._cursor.execute(sql_str)
+                self._con.commit()
+            elif tipo == "'F02-InputStatus'":
+                date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
+                str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
+                sql_str = f'INSERT INTO pointValuesF02 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
+                self._cursor.execute(sql_str)
+                self._con.commit()
+            elif tipo == "'F03-HoldingRegister'":
+                date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
+                str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
+                sql_str = f'INSERT INTO pointValuesF03 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
+                self._cursor.execute(sql_str)
+                self._con.commit()
+            elif tipo == "'F04-InputRegister'":
+                date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
+                str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
+                sql_str = f'INSERT INTO pointValuesF04 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
+                self._cursor.execute(sql_str)
+                self._con.commit()
         except Exception as e:
             print('\033[31mERRO: ', e.args, '\033[m')
 
@@ -447,7 +424,7 @@ class ClienteMODBUS():
                         value = 0
                     ende = str(addr+ic-1).zfill(5)
                     self.inserirDB(addrs=str(ende), tipo="'F01-CoilStatus'", disp="'Booleano'", value=value)
-                    self.inserirDBF01(addrs=str(ende), tipo="'F01-CoilStatus'", disp="'Booleano'", value=value)
+                    self.inserirDBF0(addrs=str(ende), tipo="'F01-CoilStatus'", disp="'Booleano'", value=value)
             return co
 
         elif tipo == 2:
@@ -461,7 +438,7 @@ class ClienteMODBUS():
                     idi += 1
                     # print(value)
                     self.inserirDB(addrs=(10000+addr+idi-1), tipo="'F02-InputStatus'", disp="'Booleano'", value=value)
-                    self.inserirDBF02(addrs=(10000+addr+idi-1), tipo="'F02-InputStatus'", disp="'Booleano'", value=value)
+                    self.inserirDBF0(addrs=(10000+addr+idi-1), tipo="'F02-InputStatus'", disp="'Booleano'", value=value)
             return di
 
         elif tipo == 3:
@@ -475,7 +452,7 @@ class ClienteMODBUS():
                     ihr += 1
                     # print(value)
                     self.inserirDB(addrs=(40000+addr+ihr-1), tipo="'F03-HoldingRegister'", disp="'Decimal'", value=value)
-                    self.inserirDBF03(addrs=(40000+addr+ihr-1), tipo="'F03-HoldingRegister'", disp="'Decimal'", value=value)
+                    self.inserirDBF0(addrs=(40000+addr+ihr-1), tipo="'F03-HoldingRegister'", disp="'Decimal'", value=value)
             return hr
 
         elif tipo == 4:
@@ -489,7 +466,7 @@ class ClienteMODBUS():
                     iir += 1
                     # print(value)
                     self.inserirDB(addrs=(30000+addr+iir-1), tipo="'F04-InputRegister'", disp="'Decimal'", value=value)
-                    self.inserirDBF04(addrs=(30000+addr+iir-1), tipo="'F04-InputRegister'", disp="'Decimal'", value=value)
+                    self.inserirDBF0(addrs=(30000+addr+iir-1), tipo="'F04-InputRegister'", disp="'Decimal'", value=value)
             return ir
 
         else:
