@@ -10,7 +10,7 @@ class ClienteMODBUS():
     Classe Cliente MODBUS
     """
 
-    def __init__(self,server_ip,porta,device_id=1,scan_time=0.3,valor=0,dbpath="C:\database.db"):
+    def __init__(self,server_ip,porta,device_id=1,scan_time=0.1,valor=0,dbpath="C:\database.db"):
         """
         Construtor
         """
