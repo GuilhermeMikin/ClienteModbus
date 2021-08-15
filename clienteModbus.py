@@ -262,7 +262,7 @@ class ClienteMODBUS():
         try:
             sql_str = f"""
             CREATE TABLE IF NOT EXISTS pointValues (
-                ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Endereço NUMERIC, Tipo TEXT, Valor REAL, TimeStamp1 TEXT NOT NULL)
+                ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Address TEXT, Type TEXT, Display TEXT, Value REAL, TimeStamp1 TEXT NOT NULL)
                 """
             self._cursor.execute(sql_str)
             self._con.commit()
@@ -270,14 +270,14 @@ class ClienteMODBUS():
             print('\033[31mERRO: ', e.args, '\033[m')
 
 
-    def inserirDB(self, addrs, tipo, value):
+    def inserirDB(self, addrs, tipo, disp, value):
         """
         Método para inserção dos dados no DB
         """
         try:
             date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
-            str_values = f"{addrs}, {tipo}, {value} , '{date}'"
-            sql_str = f'INSERT INTO pointValues (Endereço, Tipo, Valor, TimeStamp1) VALUES ({str_values})'
+            str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
+            sql_str = f'INSERT INTO pointValues (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
             self._cursor.execute(sql_str)
             self._con.commit()
         except Exception as e:
@@ -302,7 +302,8 @@ class ClienteMODBUS():
                         value = 1
                     else:
                         value = 0
-                    self.inserirDB(addrs=(00000+addr+ic-1), tipo="'Coil Status'",value=value)
+                    ende = str(addr+ic-1).zfill(5)
+                    self.inserirDB(addrs=str(ende), tipo="'F01-CoilStatus'", disp="'Decimal'", value=value)
             return co
 
         elif tipo == 2:
@@ -315,7 +316,7 @@ class ClienteMODBUS():
                     value = di[0 + idi]
                     idi += 1
                     # print(value)
-                    self.inserirDB(addrs=(10000+addr+idi-1), tipo="'Input Status'",value=value)
+                    self.inserirDB(addrs=(10000+addr+idi-1), tipo="'F02-InputStatus'", disp="'Decimal'", value=value)
             return di
 
         elif tipo == 3:
@@ -328,7 +329,7 @@ class ClienteMODBUS():
                     value = hr[0+ihr]
                     ihr += 1
                     # print(value)
-                    self.inserirDB(addrs=(40000+addr+ihr-1), tipo="'Holding Register'",value=value)
+                    self.inserirDB(addrs=(40000+addr+ihr-1), tipo="'F03-HoldingRegister'", disp="'Decimal'", value=value)
             return hr
 
         elif tipo == 4:
@@ -341,7 +342,7 @@ class ClienteMODBUS():
                     value = ir[0 + iir]
                     iir += 1
                     # print(value)
-                    self.inserirDB(addrs=(30000+addr+iir-1), tipo="'Input Register'",value=value)
+                    self.inserirDB(addrs=(30000+addr+iir-1), tipo="'F04-InputRegister'", disp="'Decimal'", value=value)
             return ir
 
         else:
@@ -359,11 +360,11 @@ class ClienteMODBUS():
         while i < leng:
             if tipo == 3:
                 i1 = self._cliente.read_holding_registers(addr - 1 + g, 2)
-                tipore = "'Holding Register'"
+                tipore = "'F03-HoldingRegister'"
                 ende = 40000
             elif tipo == 4:
                 i1 = self._cliente.read_input_registers(addr - 1 + g, 2)
-                tipore = "'Input Register'"
+                tipore = "'F04-InputRegister'"
                 ende = 30000
             else:
                 print('Tipo inválido..')
@@ -400,7 +401,7 @@ class ClienteMODBUS():
             # print(f'{round(value, 3)}')
             listfloat.append(round(value, 3))
             y += 2
-            self.inserirDB(addrs=(ende+addr+y-2), tipo=tipore, value=round(value, 3))
+            self.inserirDB(addrs=(ende+addr+y-2), tipo=tipore, disp="'Floating Point'", value=round(value, 3))
         return listfloat
 
 
@@ -415,11 +416,11 @@ class ClienteMODBUS():
         while i < leng:
             if tipo == 3:
                 i1 = self._cliente.read_holding_registers(addr - 1 + g, 2)
-                tipore = "'Holding Register'"
+                tipore = "'F03-HoldingRegister'"
                 ende = 40000
             elif tipo == 4:
                 i1 = self._cliente.read_input_registers(addr - 1 + g, 2)
-                tipore = "'Input Register'"
+                tipore = "'F04-InputRegister'"
                 ende = 30000
             else:
                 print('Tipo inválido..')
@@ -457,7 +458,7 @@ class ClienteMODBUS():
             # print(f'{round(value, 3)}')
             listfloatsp.append(round(value, 3))
             y += 2
-            self.inserirDB(addrs=(ende+addr+y-2), tipo=tipore, value=round(value, 3))
+            self.inserirDB(addrs=(ende+addr+y-2), tipo=tipore, disp="'Float (Swapped)'", value=round(value, 3))
         return listfloatsp
 
 
