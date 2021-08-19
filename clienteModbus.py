@@ -40,7 +40,7 @@ class ClienteMODBUS():
             atendimento = True
             while atendimento:
                 print('-' * 100)
-                print('\033[34mCliente Modbus\033[m'.center(100))
+                print('\033[34mCliente Modbus TCP\033[m'.center(100))
                 print('-' * 100)
                 sel = input("Qual serviço? \n1- Leitura \n2- Escrita \n3- Configuração \n4- Sair \nNº Serviço: ")
                 if sel == '1':
@@ -61,7 +61,8 @@ class ClienteMODBUS():
 
                     if tipo == 3 or tipo == 4: 
                         while True:
-                            val = int(input("\n1- Decimal \n2- Floating Point \n3- Float Swapped \nLeitura: "))
+                            print('\nQual tipo de display?')
+                            val = int(input("1- Decimal \n2- Floating Point \n3- Float Swapped \nDisplay: "))
                             if val > 3:
                                 print('\033[31mDigite um tipo válido..\033[m')
                                 sleep(0.5)
