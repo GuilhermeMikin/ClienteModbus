@@ -2,7 +2,6 @@ from pyModbusTCP.client import ModbusClient
 from time import sleep
 import time
 import datetime
-import sqlite3
 
 
 class ClienteMODBUS():
@@ -10,7 +9,7 @@ class ClienteMODBUS():
     Classe Cliente MODBUS
     """
 
-    def __init__(self,server_ip,porta,device_id=1,scan_time=0.1,valor=0,dbpath="C:\database.db"):
+    def __init__(self,server_ip,porta,device_id=1,scan_time=0.1,valor=0):
         """
         Construtor
         """
@@ -19,11 +18,6 @@ class ClienteMODBUS():
         self._device_id = device_id
         self._port = porta
         self._cliente = ModbusClient(host=server_ip, port=porta, unit_id=device_id)
-
-        self._dbpath = dbpath
-        self._valor = valor
-        self._con = sqlite3.connect(self._dbpath)
-        self._cursor = self._con.cursor()
 
     def atendimento(self):
         """
@@ -44,11 +38,6 @@ class ClienteMODBUS():
                 print('-' * 100)
                 sel = input("Qual serviço? \n1- Leitura \n2- Escrita \n3- Configuração \n4- Sair \nNº Serviço: ")
                 if sel == '1':
-                    self.createTable()
-                    self.createTableF01()
-                    self.createTableF02()
-                    self.createTableF03()
-                    self.createTableF04()
                     print('\nQual tipo de dado deseja ler?')
                     print("1- Coil Status \n2- Input Status \n3- Holding Register \n4- Input Register")
                     while True:
@@ -260,151 +249,6 @@ class ClienteMODBUS():
             print('\033[31mERRO: ', e.args, '\033[m')
 
 
-    def createTable(self):
-        """
-        Método que cria a tabela para armazenamento dos dados, caso ela não exista
-        """
-        try:
-            sql_str = f"""
-            CREATE TABLE IF NOT EXISTS pointValues (
-                ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Address TEXT, Type TEXT, Display TEXT, Value REAL, TimeStamp1 TEXT NOT NULL)
-                """
-            self._cursor.execute(sql_str)
-            self._con.commit()
-        except Exception as e:
-            print('\033[31mERRO: ', e.args, '\033[m')
-
-
-    def inserirDB(self, addrs, tipo, disp, value):
-        """
-        Método para inserção dos dados no DB
-        """
-        try:
-            date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
-            str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
-            sql_str = f'INSERT INTO pointValues (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
-            self._cursor.execute(sql_str)
-            self._con.commit()
-        except Exception as e:
-            print('\033[31mERRO: ', e.args, '\033[m')
-
-
-    def createTableF01(self):
-        """
-        Método que cria a tabela para armazenamento dos dados, caso ela não exista
-        """
-        try:
-            sql_str = f"""
-            CREATE TABLE IF NOT EXISTS pointValuesF01 (
-                ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Address TEXT, Type TEXT, Display TEXT, Value REAL, TimeStamp1 TEXT NOT NULL)
-                """
-            self._cursor.execute(sql_str)
-            self._con.commit()
-        except Exception as e:
-            print('\033[31mERRO: ', e.args, '\033[m')
-
-
-    def createTableF02(self):
-        """
-        Método que cria a tabela para armazenamento dos dados, caso ela não exista
-        """
-        try:
-            sql_str = f"""
-            CREATE TABLE IF NOT EXISTS pointValuesF02 (
-                ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Address TEXT, Type TEXT, Display TEXT, Value REAL, TimeStamp1 TEXT NOT NULL)
-                """
-            self._cursor.execute(sql_str)
-            self._con.commit()
-        except Exception as e:
-            print('\033[31mERRO: ', e.args, '\033[m')
-
-
-    def createTableF03(self):
-        """
-        Método que cria a tabela para armazenamento dos dados, caso ela não exista
-        """
-        try:
-            sql_str = f"""
-            CREATE TABLE IF NOT EXISTS pointValuesF03 (
-                ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Address TEXT, Type TEXT, Display TEXT, Value REAL, TimeStamp1 TEXT NOT NULL)
-                """
-            self._cursor.execute(sql_str)
-            self._con.commit()
-        except Exception as e:
-            print('\033[31mERRO: ', e.args, '\033[m')
-
-
-    def createTableF04(self):
-        """
-        Método que cria a tabela para armazenamento dos dados, caso ela não exista
-        """
-        try:
-            sql_str = f"""
-            CREATE TABLE IF NOT EXISTS pointValuesF04 (
-                ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Address TEXT, Type TEXT, Display TEXT, Value REAL, TimeStamp1 TEXT NOT NULL)
-                """
-            self._cursor.execute(sql_str)
-            self._con.commit()
-        except Exception as e:
-            print('\033[31mERRO: ', e.args, '\033[m')
-
-
-    def inserirDBF0(self, addrs, tipo, disp, value):
-        """
-        Método para inserção dos dados no DB
-        """
-        try:
-            if tipo == "'F01-CoilStatus'":
-                date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
-                str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
-                sql_str = f'INSERT INTO pointValuesF01 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
-                self._cursor.execute(sql_str)
-                self._con.commit()
-            elif tipo == "'F02-InputStatus'":
-                date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
-                str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
-                sql_str = f'INSERT INTO pointValuesF02 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
-                self._cursor.execute(sql_str)
-                self._con.commit()
-            elif tipo == "'F03-HoldingRegister'":
-                date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
-                str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
-                sql_str = f'INSERT INTO pointValuesF03 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
-                self._cursor.execute(sql_str)
-                self._con.commit()
-            elif tipo == "'F04-InputRegister'":
-                date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
-                str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
-                sql_str = f'INSERT INTO pointValuesF04 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
-                self._cursor.execute(sql_str)
-                self._con.commit()
-        except Exception as e:
-            print('\033[31mERRO: ', e.args, '\033[m')
-
-
-    def inserirDBFP(self, addrs, tipo, disp, value):
-        """
-        Método para inserção dos dados no DB
-        """
-        try:
-            if tipo == "'F03-HoldingRegister'":
-                date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
-                str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
-                sql_str = f'INSERT INTO pointValuesF03 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
-                self._cursor.execute(sql_str)
-                self._con.commit()
-            elif tipo == "'F04-InputRegister'":
-                date = str(datetime.datetime.fromtimestamp(int(time.time())).strftime("%Y-%m-%d %H:%M:%S"))
-                str_values = f"'{addrs}', {tipo}, {disp}, {value}, '{date}'"
-                sql_str = f'INSERT INTO pointValuesF04 (Address, Type, Display, Value, TimeStamp1) VALUES ({str_values})'
-                self._cursor.execute(sql_str)
-                self._con.commit()
-            else:
-                print("Erro ao inserir no DB com Floating Point e Float Swapped!!")
-        except Exception as e:
-            print('\033[31mERRO: ', e.args, '\033[m')
-
-
     def lerDado(self, tipo, addr, leng=1):
         """
         Método para leitura MODBUS
@@ -424,8 +268,6 @@ class ClienteMODBUS():
                     else:
                         value = 0
                     ende = str(addr+ic-1).zfill(5)
-                    self.inserirDB(addrs=str(ende), tipo="'F01-CoilStatus'", disp="'Booleano'", value=value)
-                    self.inserirDBF0(addrs=str(ende), tipo="'F01-CoilStatus'", disp="'Booleano'", value=value)
             return co
 
         elif tipo == 2:
@@ -438,8 +280,6 @@ class ClienteMODBUS():
                     value = di[0 + idi]
                     idi += 1
                     # print(value)
-                    self.inserirDB(addrs=(10000+addr+idi-1), tipo="'F02-InputStatus'", disp="'Booleano'", value=value)
-                    self.inserirDBF0(addrs=(10000+addr+idi-1), tipo="'F02-InputStatus'", disp="'Booleano'", value=value)
             return di
 
         elif tipo == 3:
@@ -452,8 +292,6 @@ class ClienteMODBUS():
                     value = hr[0+ihr]
                     ihr += 1
                     # print(value)
-                    self.inserirDB(addrs=(40000+addr+ihr-1), tipo="'F03-HoldingRegister'", disp="'Decimal'", value=value)
-                    self.inserirDBF0(addrs=(40000+addr+ihr-1), tipo="'F03-HoldingRegister'", disp="'Decimal'", value=value)
             return hr
 
         elif tipo == 4:
@@ -466,8 +304,6 @@ class ClienteMODBUS():
                     value = ir[0 + iir]
                     iir += 1
                     # print(value)
-                    self.inserirDB(addrs=(30000+addr+iir-1), tipo="'F04-InputRegister'", disp="'Decimal'", value=value)
-                    self.inserirDBF0(addrs=(30000+addr+iir-1), tipo="'F04-InputRegister'", disp="'Decimal'", value=value)
             return ir
 
         else:
@@ -526,8 +362,6 @@ class ClienteMODBUS():
             # print(f'{round(value, 3)}')
             listfloat.append(round(value, 3))
             y += 2
-            self.inserirDB(addrs=(ende+addr+y-2), tipo=tipore, disp="'Floating Point'", value=round(value, 3))
-            self.inserirDBFP(addrs=(ende+addr+y-2), tipo=tipore, disp="'Floating Point'", value=round(value, 3))
         return listfloat
 
 
@@ -584,8 +418,6 @@ class ClienteMODBUS():
             # print(f'{round(value, 3)}')
             listfloatsp.append(round(value, 3))
             y += 2
-            self.inserirDB(addrs=(ende+addr+y-2), tipo=tipore, disp="'Float (Swapped)'", value=round(value, 3))
-            self.inserirDBFP(addrs=(ende+addr+y-2), tipo=tipore, disp="'Float (Swapped)'", value=round(value, 3))
         return listfloatsp
 
 
