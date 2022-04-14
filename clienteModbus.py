@@ -1,7 +1,5 @@
 from pyModbusTCP.client import ModbusClient
 from time import sleep
-import time
-import datetime
 
 
 class ClienteMODBUS():
