@@ -149,7 +149,7 @@ class ClienteMODBUS():
                     print('\nQual tipo de dado deseja escrever? \n1- Coil Status \n2- Holding Register')
                     while True:
                         tipo = int(input("Tipo: "))
-                        if tipo > 2:
+                        if str(tipo) not in '1' and str(tipo) not in '2':
                             print('\033[31mDigite um tipo válido..\033[m')
                             sleep(0.5)
                         else:
