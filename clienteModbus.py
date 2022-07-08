@@ -6,7 +6,6 @@ class ClienteMODBUS():
     """
     Classe Cliente MODBUS
     """
-
     def __init__(self,server_ip,porta,device_id=1,scan_time=0.1,valor=0):
         """
         Construtor
@@ -66,7 +65,7 @@ class ClienteMODBUS():
                                     print(f'\033[33mLeitura {i+1}:\033[m', end='')
                                     print(self.lerDado(int(tipo),int(addr),leng))
                                     sleep(self._scan_time)
-                                print('\nValores lidos e inseridos no DB com sucesso!!\n')
+                                print('\nValores lidos com sucesso!!\n')
                                 sleep(0.5)
                             except Exception as e:
                                 print('\033[31mERRO: ', e.args, '\033[m')
@@ -80,7 +79,7 @@ class ClienteMODBUS():
                                         print(f'\033[33mLeitura {i + 1}:\033[m', end='')
                                         print(self.lerDado(int(tipo), int(addr), leng))
                                         sleep(self._scan_time)
-                                    print('\nValores lidos e inseridos no DB com sucesso!!\n')
+                                    print('\nValores lidos com sucesso!!\n')
                                     sleep(0.5)
                                 except Exception as e:
                                     print('\033[31mERRO: ', e.args, '\033[m')
@@ -98,7 +97,7 @@ class ClienteMODBUS():
                                     print(f'\033[33mLeitura {i + 1}:\033[m', end='')
                                     print(self.lerDadoFloat(int(tipo), int(addr), leng))
                                     sleep(self._scan_time)
-                                print('\nValores lidos e inseridos no DB com sucesso!!\n')
+                                print('\nValores lidos com sucesso!!\n')
                                 sleep(0.5)
                             except Exception as e:
                                 print('\033[31mERRO: ', e.args, '\033[m\n')
@@ -116,7 +115,7 @@ class ClienteMODBUS():
                                     print(f'\033[33mLeitura {i + 1}:\033[m', end='')
                                     print(self.lerDadoFloatSwapped(int(tipo), int(addr), leng))
                                     sleep(self._scan_time)
-                                print('\nValores lidos e inseridos no DB com sucesso!!\n')
+                                print('\nValores lidos com sucesso!!\n')
                                 sleep(0.5)
                             except Exception as e:
                                 print('\033[31mERRO: ', e.args, '\033[m\n')
@@ -138,7 +137,7 @@ class ClienteMODBUS():
                                 print(f'\033[33mLeitura {i + 1}:\033[m', end='')
                                 print(self.lerDado(int(tipo), int(addr), leng))
                                 sleep(self._scan_time)
-                            print('\nValores lidos e inseridos no DB com sucesso!!\n')
+                            print('\nValores lidos com sucesso!!\n')
                             sleep(0.5)
                         except Exception as e:
                             print('\033[31mERRO: ', e.args, '\033[m\n')
@@ -319,6 +318,7 @@ class ClienteMODBUS():
         while i < leng:
             if tipo == 3:
                 i1 = self._cliente.read_holding_registers(addr - 1 + g, 2)
+                print(f'modbus value holdingregister: {i1}; type: {type(i1)}, type value: {type(i1[0])}')
                 tipore = "'F03-HoldingRegister'"
                 ende = 40000
             elif tipo == 4:
