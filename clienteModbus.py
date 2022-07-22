@@ -264,7 +264,6 @@ class ClienteMODBUS():
                         value = 1
                     else:
                         value = 0
-                    ende = str(addr+ic-1).zfill(5)
             return co
 
         elif tipo == 2:
@@ -276,7 +275,6 @@ class ClienteMODBUS():
                 else:
                     value = di[0 + idi]
                     idi += 1
-                    # print(value)
             return di
 
         elif tipo == 3:
@@ -288,7 +286,6 @@ class ClienteMODBUS():
                 else:
                     value = hr[0+ihr]
                     ihr += 1
-                    # print(value)
             return hr
 
         elif tipo == 4:
@@ -300,7 +297,6 @@ class ClienteMODBUS():
                 else:
                     value = ir[0 + iir]
                     iir += 1
-                    # print(value)
             return ir
 
         else:
@@ -318,13 +314,8 @@ class ClienteMODBUS():
         while i < leng:
             if tipo == 3:
                 i1 = self._cliente.read_holding_registers(addr - 1 + g, 2)
-                print(f'modbus value holdingregister: {i1}; type: {type(i1)}, type value: {type(i1[0])}')
-                tipore = "'F03-HoldingRegister'"
-                ende = 40000
             elif tipo == 4:
                 i1 = self._cliente.read_input_registers(addr - 1 + g, 2)
-                tipore = "'F04-InputRegister'"
-                ende = 30000
             else:
                 print('Tipo inválido..')
             for x in i1:
@@ -357,7 +348,6 @@ class ClienteMODBUS():
                 mantdec = mantdec + (int(mant[i]) * (2 ** mantpot))
                 mantpot -= 1
             value = ((-1)**sign)*(1+mantdec)*2**(expodec-127)
-            # print(f'{round(value, 3)}')
             listfloat.append(round(value, 3))
             y += 2
         return listfloat
@@ -374,12 +364,8 @@ class ClienteMODBUS():
         while i < leng:
             if tipo == 3:
                 i1 = self._cliente.read_holding_registers(addr - 1 + g, 2)
-                tipore = "'F03-HoldingRegister'"
-                ende = 40000
             elif tipo == 4:
                 i1 = self._cliente.read_input_registers(addr - 1 + g, 2)
-                tipore = "'F04-InputRegister'"
-                ende = 30000
             else:
                 print('Tipo inválido..')
             i2 = i1[::-1]
@@ -413,7 +399,6 @@ class ClienteMODBUS():
                 mantdec = mantdec + (int(mant[i]) * (2 ** mantpot))
                 mantpot -= 1
             value = ((-1)**sign)*(1+mantdec)*2**(expodec-127)
-            # print(f'{round(value, 3)}')
             listfloatsp.append(round(value, 3))
             y += 2
         return listfloatsp
