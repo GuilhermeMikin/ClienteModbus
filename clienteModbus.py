@@ -38,7 +38,7 @@ class ClienteMODBUS():
                     print('\nQual tipo de dado deseja ler?')
                     print("1- Coil Status \n2- Input Status \n3- Holding Register \n4- Input Register")
                     while True:
-                        tipo = int(input("Type: "))
+                        tipo = int(input("Tipo: "))
                         if tipo > 4:
                             print('\033[31mDigite um tipo válido..\033[m')
                             sleep(0.5)
@@ -87,10 +87,11 @@ class ClienteMODBUS():
                                     sleep(1.5)
 
                         elif val == 2: #valores FLOAT
-                            addr = input(f'\nAddress: ')
-                            leng = int(input(f'Length: '))
-                            nvezes = input('Quantidade de leituras: ')
-                            print('\nComeçando leitura FLOAT..\n')
+                            addr = input(f'\nEndereço: ')
+                            leng = int(input(f'N° de registros: '))
+                            # nvezes = input('Quantidade de leituras: ')
+                            nvezes = 10
+                            print('\nIniciando leitura...\n')
                             sleep(0.5)
                             try:
                                 for i in range(0, int(nvezes)):
