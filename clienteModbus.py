@@ -22,7 +22,7 @@ class ClienteMODBUS():
         """
         try:
             self._cliente.open()
-            print('\n\033[33m --> Cliente Modbus conectado..\033[m\n')
+            print(f'\n\033[33m --> Cliente Modbus conectado à rede...\033[m Host: {self._server_ip} Porta: {self._port}\n')
 
         except Exception as e:
             print('\033[31mERRO: ', e.args, '\033[m')
@@ -61,6 +61,7 @@ class ClienteMODBUS():
                             print('\nComeçando leitura Decimal..\n')
                             sleep(0.5)
                             try:
+                                print(f'\033[33mAddress:    {addr} |    {addr+1} |    {addr+2} |    {addr+3} |    {addr+4} |    {addr+5}\033[m ')
                                 for i in range(0,int(nvezes)):
                                     print(f'\033[33mLeitura {i+1}:\033[m', end='')
                                     print(self.lerDado(int(tipo),int(addr),leng))
@@ -87,16 +88,17 @@ class ClienteMODBUS():
                                     sleep(1.5)
 
                         elif val == 2: #valores FLOAT
-                            addr = input(f'\nEndereço: ')
+                            addr = int(input(f'\nEndereço: '))
                             leng = int(input(f'N° de registros: '))
                             # nvezes = input('Quantidade de leituras: ')
                             nvezes = 10
                             print('\nIniciando leitura...\n')
                             sleep(0.5)
                             try:
+                                print(f'\033[33mAddress:      {addr} | {addr+2} | {addr+4} | {addr+6} | {addr+8} | {addr+10} |\033[m ')
                                 for i in range(0, int(nvezes)):
-                                    print(f'\033[33mLeitura {i + 1}:\033[m', end='')
-                                    print(self.lerDadoFloat(int(tipo), int(addr), leng))
+                                    print(f'\033[33mLeitura {i + 1}: \033[m', end='')
+                                    print(self.lerDadoFloat(int(tipo), addr, leng))
                                     sleep(self._scan_time)
                                 print('\nValores lidos com sucesso!!\n')
                                 sleep(0.5)
